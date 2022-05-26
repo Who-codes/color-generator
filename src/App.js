@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Values from "values.js";
+import SingleColor from "./SinglrColor";
 function App() {
   const [color, setColor] = useState("");
   const [error, setError] = useState(false);
@@ -7,14 +8,22 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      const colors = new Values(color).all(20);
+      setList(colors);
+    } catch (error) {
+      setError(true);
+    }
+    console.log(list);
   };
 
   return (
     <>
-      <ssection className="container">
+      <section className="container">
         <h3>Color Generator</h3>
         <form onSubmit={handleSubmit}>
           <input
+            className={error ? "error" : null}
             type="text"
             value={color}
             placeholder="#f15025"
@@ -22,9 +31,11 @@ function App() {
           />
           <button className="btn">generate</button>
         </form>
-      </ssection>
+      </section>
       <section className="colors">
-        <h4>List goes Here</h4>
+        {list.map((item, index) => (
+          <SingleColor key={index} {...item} index={index} />
+        ))}
       </section>
     </>
   );
