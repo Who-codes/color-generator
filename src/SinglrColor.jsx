@@ -5,10 +5,22 @@ const SingleColor = ({ rgb, weight, index }) => {
   const [alert, setAlert] = useState(false);
   const bcg = rgb.join(",");
   const hex = rgbToHex(...rgb);
+  const handleClick = () => {
+    setAlert(true);
+    navigator.clipboard.writeText(hex);
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAlert(false);
+    }, 800);
+    return () => clearTimeout(timeout);
+  }, [alert]);
   return (
     <article
-      className={index > 10 ? "color-light" : "color"}
+      className={`color ${index > 10 && "color-light"}`}
       style={{ backgroundColor: `rgb(${bcg})` }}
+      onClick={handleClick}
     >
       <p className="percent-value">{weight}%</p>
       <p className="color-value">{hex}</p>
